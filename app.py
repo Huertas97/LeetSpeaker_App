@@ -13,28 +13,30 @@ from pyleetspeak import LeetSpeaker
 app = dash.Dash(
     __name__,
     external_stylesheets=[
-        dbc.themes.FLATLY,
+        dbc.themes.VAPOR,
         "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css",
     ],
     suppress_callback_exceptions=True,
 )
-app.title = "PyLeetSpeak"
+app.title = "LeetSpeaker"
 app._favicon = "./assets/favicon.ico"
 
 server = app.server
 
 pyleetspeak_img = html.Img(
-    src="./assets/favicon.ico",
+    src="./assets/Logo-LeetSpeaker-oscuro-cropped.png",
     alt="pyLeetSpeak Logo",
     # width="5",
     style={
         # "display": "inline-block",
-        "width": "1em",
-        "height": "1em",
+        "width": "15em",
+        "height": "12em",
         # "border-color": "black",
         # "border-style": "solid",
-        "padding-top": 0,
-        "margin-bottom": "0.3em",
+        "padding-top": 2,
+        "margin-top": "0.3em",
+        # "margin-bottom": "0.3em",
+        "margin-left": "-0.5em"        
     },
 )
 
@@ -44,29 +46,56 @@ aida_img = html.Img(
     # width="5",
     style={
         # "display": "inline-block",
-        "width": "2.2em",
-        "height": "1em",
+        "width": "18em",
+        "height": "6em",
         # "border-color": "black",
         # "border-style": "solid",
         "padding-top": 0,
         "margin-bottom": "0.3em",
-        "margin-left": "0.2em"
+        "margin-left": "-0.5em"
     },
 )
 
 header = html.Div(
     [
+        dbc.Row(children=[
+            dbc.Col(pyleetspeak_img, width="auto", style = {  
+                         "display": "grid",                 
+                         "justify-content": "center",
+                         "align-content": "center", 
+                         # "border-color": "black",  "border-style": "solid",
+            }), 
+            dbc.Col(aida_img, width="auto", style = {  
+                         "display": "grid",                 
+                         "justify-content": "center",
+                         "align-content": "center", 
+                         # "border-color": "black",  "border-style": "solid",
+            })
+        ],
+                justify="evenly",
+                style = {
+                    # "border-color": "black",  "border-style": "solid",
+                                                           # "margin-bottom": "-10em",
+                         # "display": "grid",                 
+                         # "justify-content": "center",
+                         # "align-content": "center"
+                                                   }
+               ), 
+        html.Br(), 
         dbc.Row(
             [
                 html.H1(
                     [
                         "Welcome to ", 
-                        html.Span(children=["Leet"], style={"color":"blue"}),
-                        html.Span(children=["Speaker"], style={"color":"yellow"}),
-                        html.Span(children=[pyleetspeak_img, aida_img ]),
+                        html.Span(children=["Leet"], style={"color":"#ffbd59"}),
+                        html.Span(children=["Speaker"], style={"color":"#5271ff"}),
+                        # html.Span(children=[pyleetspeak_img, aida_img ]),
                     ],
                     # style={"border-color": "black", "border-style": "solid"},
-                    className="display-1",
+                    className="display-1", style = {
+                        # "border-color": "black",  "border-style": "solid",
+                                                           # "margin-bottom": "-1em",
+                                                   }
                 ),
             ],
         ),
@@ -76,7 +105,7 @@ header = html.Div(
         ),
         html.P(
             [
-                "You can use this tool in your code installing the PyPi package ",
+                "Word camouflage is currently used to evade content moderation in Social Media. Therefore, this tool aims to counter new misinformation that emerges in social media platforms by providing a mechanism for simulating and generating leetspeak/word camouflaging data. You can use this tool in your code installing the PyPi package ",
                 html.Span(
                     html.A(
                         children=[html.I(className="fa fa-external-link")],
@@ -114,7 +143,7 @@ dropdown_mode_selection = html.Div(
                 dbc.InputGroupText("Mode"),
                 dbc.Select(
                     id="dropdown-mode",
-                    options=[{"label": i, "value": i} for i in ["Basic"]],
+                    options=[{"label": i, "value": i} for i in ["Basic", "Intermediate", "Advanced", "COVID_basic", "COVID_intermediate"]],
                     value="Basic",
                 ),
             ],
@@ -255,6 +284,79 @@ change_frq_slider = html.Div(
         ),
     ]
 )
+
+
+uniform_selection = html.Div(
+    [
+        dbc.Row(
+            [
+                dbc.Col(
+                    dbc.Label(
+                        "Select if all the matches of a target character are uniformingly or independently substituted",
+                        html_for="slider",
+                    ),
+                    width={
+                        "size": 6,
+                        "offset": 0,  # left-margin
+                    },
+                    style={
+                        "margin-right": "0em",  # the right-element will be attracted if negative
+                        # "border-color": "black",
+                        # "border-style": "solid",
+                    },
+                    align="center",
+                ),
+                dbc.Col(
+                    dbc.Button(
+                        children=[
+                            "More info",
+                            html.I(
+                                className="fa fa-info-circle",
+                                style={"margin-left": "0.5em"},
+                            ),
+                        ],
+                        id="popover-uniform",
+                        outline=True,
+                        color="info",
+                    ),
+                    width={"offset": 0},  # X-axis
+                    style={"margin-bottom": "1.2em", "height": "1.8em"},  # Y-axis
+                    align="center",
+                ),
+                dbc.Popover(
+                    """
+Usually, the same substitution character is used in all the matches for a specific substitution type. In other words, the same target character is usually replaced by the same substitution character. This parameter determines if all the matches of a target character are jointly or independently substituted.
+                    """,
+                    body=True,
+                    target="popover-uniform",
+                    trigger="hover",
+                    style={"max-width": "50em"},
+                ),
+            ],
+            # align="start",
+            className="g-0",
+        ),
+        dbc.Row(
+        dbc.InputGroup(
+            [          
+                dbc.RadioItems(
+                    options=[
+                        {"label": "Yes", "value": True},
+                        {"label": "No", "value": False},
+                    ],
+                    value=True,
+                    id={"type": "change-slider", "index": 3}
+                ),                
+            ],
+            className="mb-3",
+        ),
+        ),
+    ]
+)
+
+
+
+
 
 input_text = html.Div(
     [
@@ -408,7 +510,7 @@ def display_sliders(radioitems_value):
     ):  # if random change has been selected
         sliders = (
             dbc.Form(
-                [change_prb_slider, change_frq_slider, html.Hr(), html.Br()],
+                [html.Br(), change_prb_slider, html.Br(), change_frq_slider, html.Br(), html.Br(), uniform_selection, html.Hr(), html.Br()],
                 # row=True,
             ),
         )
@@ -436,14 +538,14 @@ def leeter(n_clicks, text_in, mode, sliders_values):
 
     # Si introducen valores en los sliders estamos en modo cmabio aleatorio
     elif sliders_values:
-        change_prb, change_frq = sliders_values
+        change_prb, change_frq, uniform_change = sliders_values
         res = LeetSpeaker(
-            text_in=text_in,
             change_prb=change_prb,
             change_frq=change_frq,
             mode=mode.lower(),
+            uniform_change=uniform_change,
             get_all_combs=False,
-        ).text2leet()
+        ).text2leet(text_in)
         return (
             html.Div([html.Br(), html.H4(f"{res}")]),
             json.dumps(res),
@@ -453,10 +555,9 @@ def leeter(n_clicks, text_in, mode, sliders_values):
     # Si no introdujeron sliders values es modo get all
     else:
         res = LeetSpeaker(
-            text_in=text_in,
             mode=mode.lower(),
             get_all_combs=True,
-        ).text2leet()
+        ).text2leet(text_in)
 
         # pasamos a json type para poder guardarlo con dcc.Store en la sesion y poder trabajar coon elr esultado
         total_number_results = len(list(set(res)))
